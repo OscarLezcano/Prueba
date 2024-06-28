@@ -1,47 +1,57 @@
-const BUTTON = document.getElementById("guess-button");
 let intentos = 6;
-let palabraSecreta = 'APPLE';
+const VERDE = 'green';
+const AMARILLO = 'yellow';
+const BUTTON = document.getElementById("guess-button");
+let diccionario = ['APPLE', 'HURLS', 'WINGS', 'YOUTH'];
+let palabra = diccionario[Math.floor(Math.random() * diccionario.length)];
 
-window.addEventListener('load', init = () => { 
+function initGame() {
+    console.log('Juego Iniciado');
+}
 
-    console.log('Juego Iniciado'); 
-
-});
-
-BUTTON.addEventListener("click", intentar = () => {
-
+function validarIntento() {
     const INTENTO = getIntento();
-    if (INTENTO === palabraSecreta ) {
-        terminar("<h1>GANASTE!😀</h1>")
-        return
+    if (INTENTO.length !== palabra.length) {
+        alert("El intento debe tener " + palabra.length + " letras.");
+        return;
     }
 
-    for (let i in palabraSecreta) {
-        if (INTENTO[i]===palabraSecreta[i]){
-            console.log(INTENTO[i], "VERDE")
-        } else if (palabraSecreta.includes(INTENTO[i]) ) {
-            console.log(INTENTO[i], "AMARILLO")
-        } else {
-            console.log(INTENTO[i], "GRIS")
+    const GRID = document.getElementById("grid");
+    const ROW = document.createElement('div');
+    ROW.className = 'row';
+
+    if (INTENTO === palabra) {
+        endGame("<h1>GANASTE!😀</h1>");
+        return;
+    }
+
+    for (let i in palabra) {
+        const SPAN = document.createElement('span');
+        SPAN.className = 'letter';
+        if (INTENTO[i] === palabra[i]) {
+            SPAN.style.backgroundColor = VERDE;
+        } else if (palabra.includes(INTENTO[i])) {
+            SPAN.style.backgroundColor = AMARILLO;
         }
-    }
-	
-    intentos--
-    if (intentos===0) {
-        terminar("<h1>PERDISTE!😖</h1>")
+        SPAN.innerHTML = INTENTO[i];
+        ROW.appendChild(SPAN);
     }
 
-});
-
-function getIntento() { 
-    let input = document.getElementById('guess-input');
-    return input.value.toUpperCase();
+    GRID.appendChild(ROW);
+    intentos--;
+    if (intentos === 0) {
+        endGame("<h1>Perdiste. La palabra era: " + palabra + "</h1>");
+    }
 }
 
-function terminar(mensaje) {
-    const INPUT = document.getElementById("guess-input");
-    INPUT.disabled = true;
-    BUTTON.disabled = true;
-    let contenedor = document.getElementById('guesses');
-    contenedor.innerHTML = mensaje;
+function endGame(mensaje) {
+    document.getElementById("game-over").innerHTML = mensaje;
+    BUTTON.removeEventListener("click", validarIntento);
 }
+
+function getIntento() {
+    return document.getElementById("guess-input").value.toUpperCase();
+}
+
+window.addEventListener('load', initGame);
+BUTTON.addEventListener("click", validarIntento);
