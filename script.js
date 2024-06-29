@@ -2,13 +2,16 @@ let intentos = 6;
 const VERDE = 'green';
 const AMARILLO = 'yellow';
 const BUTTON = document.getElementById("guess-button");
-let diccionario = ['MANZANA','CASA','DAVID'];
-let palabra = diccionario[Math.floor(Math.random() * diccionario.length)];
+//let diccionario = ['MANZANA','CASA','DAVID'];
+//let palabra = diccionario[Math.floor(Math.random() * diccionario.length)];
+let palabra;
 
-function initGame() {
+async function initGame() {
     console.log('Juego Iniciado');
+    palabra = await getPalabraAleatoria();
+    palabra = palabra.toUpperCase(); 
+    console.log(palabra);
 }
-
 function validarIntento() {
     const INTENTO = getIntento();
     if (INTENTO.length !== palabra.length) {
@@ -54,6 +57,17 @@ function endGame(mensaje){
 
 function getIntento() {
     return document.getElementById("guess-input").value.toUpperCase();
+}
+
+async function getPalabraAleatoria() {
+    try {
+        const response = await fetch('https://random-word-api.herokuapp.com/word?lang=es');
+        const data = await response.json();
+        return String(data[0]);
+    } catch (error) {
+        console.error('Error al obtener la palabra:', error);
+        return null;
+    }
 }
 
 window.addEventListener('load', initGame);
