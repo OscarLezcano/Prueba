@@ -40,10 +40,12 @@
      display: inline-block
  }
     
- .row{
-     margin-bottom: 10px;
+ .row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
  }
     
- .input-area{
+ .input-area {
      margin: 30px;
  }

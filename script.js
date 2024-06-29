@@ -2,7 +2,7 @@ let intentos = 6;
 const VERDE = 'green';
 const AMARILLO = 'yellow';
 const BUTTON = document.getElementById("guess-button");
-let diccionario = ['APPLE', 'HURLS', 'WINGS', 'YOUTH'];
+let diccionario = ['MANZANA','CASA','DAVID'];
 let palabra = diccionario[Math.floor(Math.random() * diccionario.length)];
 
 function initGame() {
@@ -44,9 +44,12 @@ function validarIntento() {
     }
 }
 
-function endGame(mensaje) {
-    document.getElementById("game-over").innerHTML = mensaje;
-    BUTTON.removeEventListener("click", validarIntento);
+function endGame(mensaje){
+    const INPUT = document.getElementById("guess-input");
+    INPUT.disabled = true;
+    BUTTON.disabled = true;
+    let contenedor = document.getElementById('guesses');
+    contenedor.innerHTML = mensaje;
 }
 
 function getIntento() {
